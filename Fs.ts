@@ -41,7 +41,7 @@
 
         function getBinary(url: string, success: (data: ArrayBuffer) => void): void {
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
+            xhr.open('GET', url.toLowerCase(), true);
             xhr.responseType = 'arraybuffer';
             xhr.onreadystatechange = () => {
                 if (xhr.readyState == 4) {

@@ -756,7 +756,7 @@
             this.variables[varNo] = this.gameObjects[objNo].loop;
         }
 
-        agi_currentview(objNo: number, varNo: number) {
+        agi_current_view(objNo: number, varNo: number) {
             this.variables[varNo] = this.gameObjects[objNo].viewNo;
         }
 
@@ -1019,6 +1019,10 @@
 
         agi_get(itemNo: number) {
             
+        }
+
+        agi_get_num(itemNo: number) {
+
         }
 
         agi_discard_sound(n1: number) {
