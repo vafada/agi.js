@@ -12,6 +12,19 @@
   at http://wiki.scummvm.org/index.php/AGI/Specifications
 */
 namespace Agi {
+    const SPECIAL_CHARS: number[] = [
+        36,
+        37,
+        38,
+        33,
+        39,
+        34,
+        40,
+        35,
+        12,
+        27
+    ]
+
     export var palette: number[] = [
         0x000000,
         0x0000AA,
@@ -32,20 +45,21 @@ namespace Agi {
     ];
 
     export var interpreter: Interpreter;
+
     export function start(path: string, context: CanvasRenderingContext2D) {
         Resources.load(path, () => {
             interpreter = new Interpreter(context);
             interpreter.start();
 
-            window.onkeypress = function (e) {
-                if (e.which != 13) {
-                    interpreter.keyboardCharBuffer.push(e.which);
-                    console.log("Keypress");
-                }
-            };
+
             window.onkeydown = function (e) {
-                interpreter.keyboardSpecialBuffer.push(e.which);
-                console.log("keydown");
+                const keyCode = e.which;
+                if (SPECIAL_CHARS.includes(keyCode)) {
+                    interpreter.keyboardSpecialBuffer.push(e.which);
+                } else {
+                    interpreter.keyboardCharBuffer.push(e.which);
+                }
+
             };
 
             (function renderloop() {

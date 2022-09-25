@@ -43,6 +43,8 @@
         dialogueStrX: number;
         dialogueMode: number;
 
+        showStatusLine: boolean = false;
+
         screen: Screen = new Screen(this);
 
         constructor(private context: CanvasRenderingContext2D) {
@@ -80,11 +82,11 @@
             this.cycle();
         }
 
-        setEgoDir(newEgoDir: number){
+        setEgoDir(newEgoDir: number) {
             let egoDir = this.variables[6];
             this.variables[6] = egoDir == newEgoDir ? 0 : newEgoDir;
         }
-        
+
         cycle(): void {
             this.flags[2] = false;  // The player has entered a command
             this.flags[4] = false;  // said accepted user input
@@ -97,21 +99,21 @@
                         if (key == 37) // left
                             this.setEgoDir(7);
                         else if (key == 36) // left-up
-                            this.setEgoDir( 8);
+                            this.setEgoDir(8);
                         else if (key == 38) // up
-                            this.setEgoDir( 1);
+                            this.setEgoDir(1);
                         else if (key == 33) // right-up
-                            this.setEgoDir( 2);
+                            this.setEgoDir(2);
                         else if (key == 39) // right
-                            this.setEgoDir( 3);
+                            this.setEgoDir(3);
                         else if (key == 34) // right-down
-                            this.setEgoDir( 4);
+                            this.setEgoDir(4);
                         else if (key == 40) // down
-                            this.setEgoDir( 5);
+                            this.setEgoDir(5);
                         else if (key == 35) // down-left
-                            this.setEgoDir( 6);
+                            this.setEgoDir(6);
                         else if (key == 12) // stop
-                            this.setEgoDir( 0);
+                            this.setEgoDir(0);
                         else if (key == 27) { // Escape
                             alert("Menu");
                         }
@@ -119,21 +121,21 @@
                 }
 
                 while (this.keyboardCharBuffer.length > 0) {
-                    var key: number = this.keyboardCharBuffer.shift();
+                    const key: number = this.keyboardCharBuffer.shift();
+                    console.log("key = " + key);
                     if (key >= 32 && key < 127 && this.inputBuffer.length < this.variables[24]) {
                         this.inputBuffer += String.fromCharCode(key);
                     } else if (key == 8 && this.inputBuffer.length > 0) { // Backspace
                         this.inputBuffer = this.inputBuffer.substr(0, this.inputBuffer.length - 1);
-                    } else if (key == 8 && this.inputBuffer.length > 0) { // Backspace
-                        this.inputBuffer = this.inputBuffer.substr(0, this.inputBuffer.length - 1);
-                    } else if (key == 13) {
+                    } else if (key == 13) { //Enter
                         this.flags[2] = true; // The player has entered a command
                         this.keyboardCharBuffer = [];
                         break;
                     }
+                    console.log("this.inputBuffer = " + this.inputBuffer);
                 }
             }
-            
+
             let egoDir: number = this.variables[6];
             if (this.dialogue) {
                 if (this.dialogueMode == 1) { // string input
@@ -222,7 +224,7 @@
             this.bltFrame();
         }
 
-        
+
         bltFrame() {
             /*var data = this.frameData.data;
             for (var k = 0; k < Bitmap.width * Bitmap.height; k++) {
@@ -264,8 +266,7 @@
                                 obj.direction = Direction.UpRight;
                             else
                                 obj.direction = Direction.Right;
-                        }
-                        else if (obj.moveToX < obj.x) {
+                        } else if (obj.moveToX < obj.x) {
                             if (obj.moveToY > obj.y)
                                 obj.direction = Direction.DownLeft;
                             else if (obj.moveToY < obj.y)
@@ -300,7 +301,7 @@
                     newX = obj.x - xStep;
                 else if (obj.direction == 3 || obj.direction == 2 || obj.direction == 4)
                     newX = obj.x + xStep;
-                
+
                 if (obj.ignoreBlocks == false && newY != obj.y) {
                     for (var xNumber: number = 0; xNumber < cel.width; xNumber++) {
                         var idx: number = newY * 160 + (obj.x + xNumber);
@@ -331,7 +332,7 @@
                                 this.variables[6] = obj.direction;
                         }
                     }
-                    
+
                 }
                 obj.x = newX;
 
@@ -450,6 +451,7 @@
         agi_assignn(varNo: number, num: number): void {
             this.variables[varNo] = num;
         }
+
         agi_assignv(varNo1: number, varNo2: number): void {
             this.agi_assignn(varNo1, this.variables[varNo2]);
         }
@@ -457,6 +459,7 @@
         agi_addn(varNo: number, num: number): void {
             this.variables[varNo] += num;
         }
+
         agi_addv(varNo1: number, varNo2: number): void {
             this.agi_addn(varNo1, this.variables[varNo2]);
         }
@@ -464,6 +467,7 @@
         agi_subn(varNo: number, num: number): void {
             this.variables[varNo] -= num;
         }
+
         agi_subv(varNo1: number, varNo2: number): void {
             this.agi_subn(varNo1, this.variables[varNo2]);
         }
@@ -471,9 +475,11 @@
         agi_lindirectn(varNo: number, val: number): void {
             this.variables[this.variables[varNo]] = val;
         }
+
         agi_lindirectv(varNo1: number, varNo2: number): void {
             this.agi_lindirectn(varNo1, this.variables[varNo2]);
         }
+
         agi_rindirect(varNo1: number, varNo2: number): void {
             this.variables[varNo1] = this.variables[this.variables[varNo2]];
         }
@@ -481,18 +487,23 @@
         agi_set(flagNo: number): void {
             this.flags[flagNo] = true;
         }
+
         agi_reset(flagNo: number): void {
             this.flags[flagNo] = false;
         }
+
         agi_toggle(flagNo: number): void {
             this.flags[flagNo] = !this.flags[flagNo];
         }
+
         agi_setv(varNo: number): void {
             this.agi_set(this.variables[varNo]);
         }
+
         agi_reset_v(varNo: number): void {
             this.agi_reset(this.variables[varNo]);
         }
+
         agi_togglev(varNo: number): void {
             this.agi_toggle(this.variables[varNo]);
         }
@@ -509,6 +520,7 @@
             }
             this.logicNo = this.logicStack.pop();
         }
+
         agi_call_v(varNo: number): void {
             this.agi_call(this.variables[varNo]);
         }
@@ -516,6 +528,7 @@
         agi_print_at(msgNo: number, x: number, y: number, width: number): void {
 
         }
+
         agi_print_atv(varNo: number, x: number, y: number, width: number): void {
             this.agi_print_at(this.variables[varNo], x, y, width);
         }
@@ -523,6 +536,7 @@
         agi_muln(varNo: number, val: number): void {
             this.variables[this.variables[varNo]] *= val;
         }
+
         agi_mulv(varNo1: number, varNo2: number): void {
             this.agi_muln(varNo1, this.variables[varNo2]);
         }
@@ -530,6 +544,7 @@
         agi_divn(varNo: number, val: number): void {
             this.variables[this.variables[varNo]] /= val;
         }
+
         agi_divv(varNo1: number, varNo2: number): void {
             this.agi_divn(varNo1, this.variables[varNo2]);
         }
@@ -538,6 +553,7 @@
             console.log("NEW_ROOM " + roomNo);
             this.newroom = roomNo;
         }
+
         agi_new_room_v(varNo: number) {
             this.agi_new_room(this.variables[varNo]);
         }
@@ -650,6 +666,7 @@
             this.gameObjects[objNo].x = x;
             this.gameObjects[objNo].y = y;
         }
+
         agi_position_v(objNo: number, varNo1: number, varNo2: number) {
             this.agi_position(objNo, this.variables[varNo1], this.variables[varNo2]);
         }
@@ -804,6 +821,7 @@
             // TODO: Add margin
             this.screen.bltView(viewNo, loopNo, celNo, x, y, priority);
         }
+
         agi_add_to_pic_v(varNo1: number, varNo2: number, varNo3: number, varNo4: number, varNo5: number, varNo6: number, varNo7: number) {
             this.agi_add_to_pic(
                 this.variables[varNo1],
@@ -813,7 +831,7 @@
                 this.variables[varNo5],
                 this.variables[varNo6],
                 this.variables[varNo7]
-                );
+            );
         }
 
         agi_random(start: number, end: number, varNo: number) {
@@ -907,6 +925,7 @@
         }
 
         agi_clear_lines(fromRow: number, row: number, colorNo: number) {
+            console.log("agi_clear_lines = ", fromRow, row);
             for (var y = fromRow; y < row + 1; y++) {
                 this.screen.bltText(y, 0, "                                        ");
             }
@@ -961,11 +980,11 @@
         }
 
         agi_status_line_on() {
-
+            this.showStatusLine = true;
         }
 
         agi_status_line_off() {
-
+            this.showStatusLine = false;
         }
 
         agi_load_sound(soundNo: number) {
@@ -994,11 +1013,11 @@
         }
 
         agi_status() {
-            
+
         }
 
         agi_clear_text_rect(n1: number, n2: number, n3: number, n4: number, n5: number) {
-            
+
         }
 
         agi_menu_input() {
@@ -1014,11 +1033,11 @@
         }
 
         agi_show_obj_v(varNo: number) {
-            
+
         }
 
         agi_get(itemNo: number) {
-            
+
         }
 
         agi_get_num(itemNo: number) {
@@ -1030,7 +1049,7 @@
         }
 
         agi_save_game() {
-            
+
         }
 
         agi_restore_game() {
@@ -1062,7 +1081,7 @@
         }
 
         agi_echo_line() {
-            
+
         }
 
         agi_cancel_line() {
@@ -1109,15 +1128,16 @@
         agi_reset_scan_start() {
             this.loadedLogics[this.logicNo].scanStart = 0;
         }
-        
+
         agi_close_window() {
-            
+
         }
 
         /* Tests */
         agi_test_equaln(varNo: number, val: number): boolean {
             return this.variables[varNo] == val;
         }
+
         agi_test_equalv(varNo1: number, varNo2: number): boolean {
             return this.agi_test_equaln(varNo1, this.variables[varNo2]);
         }
@@ -1125,6 +1145,7 @@
         agi_test_lessn(varNo: number, val: number): boolean {
             return this.variables[varNo] < val;
         }
+
         agi_test_lessv(varNo1: number, varNo2: number): boolean {
             return this.agi_test_lessn(varNo1, this.variables[varNo2]);
         }
@@ -1132,6 +1153,7 @@
         agi_test_greatern(varNo: number, val: number): boolean {
             return this.variables[varNo] > val;
         }
+
         agi_test_greaterv(varNo1: number, varNo2: number): boolean {
             return this.agi_test_greatern(varNo1, this.variables[varNo2]);
         }
@@ -1139,6 +1161,7 @@
         agi_test_isset(flagNo: number): boolean {
             return this.flags[flagNo];
         }
+
         agi_test_issetv(varNo: number): boolean {
             return this.agi_test_isset(this.variables[varNo]);
         }

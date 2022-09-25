@@ -186,3 +186,4 @@ UpgradeLog*.htm
 FakesAssemblies/
 *.iml
 .idea/
+dist/

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es2015",
+        "target": "ES2020",
         "noImplicitAny": false,
         "sourceMap": true,
         "outFile": "dist/agi.js",

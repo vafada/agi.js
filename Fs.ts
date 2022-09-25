@@ -48,7 +48,6 @@
                     if (xhr.response === null) {
                         throw "Fatal error downloading '" + url + "'";
                     } else {
-                        console.log("Successfully downloaded '" + url + "'");
                         success(xhr.response);
                     }
                 }

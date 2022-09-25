@@ -562,7 +562,7 @@
                     }
                 } else {
                     funcName = LogicParser.statements[opCodeNr];
-                    console.log(opCodeNr + " = " + funcName);
+                    // console.log(opCodeNr + " = " + funcName);
                     statement = <IStatement>this.interpreter["agi_" + funcName];
                     if (statement === undefined)
                         throw "Statement not implemented: " + funcName;
