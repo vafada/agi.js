@@ -1,28 +1,60 @@
 ﻿namespace Agi {
     export class FastQueue {
-        maxSize: number = 8000;
-        private container: Uint8Array = new Uint8Array(this.maxSize);
-        private eIndex: number = 0;
-        private dIndex: number = 0;
+        // initialise the queue and offset
+        queue = [];
+        offset = 0;
 
-        isEmpty(): boolean {
-            return this.eIndex == this.dIndex;
-        }
+        /**
+         * Returns the length of the queue.
+         *
+         * @returns {number}
+         */
+        getLength() {
+            // return the length of the queue
+            return (this.queue.length - this.offset);
+        };
 
-        enqueue(val: number) {
-            if (this.eIndex + 1 == this.dIndex || (this.eIndex + 1 == this.maxSize && this.dIndex == 0))
-                throw "Queue overflow";
-            this.container[this.eIndex++] = val;
-            if (this.eIndex == this.maxSize)
-                this.eIndex = 0;
-        }
 
-        dequeue(): number {
-            if (this.dIndex == this.maxSize)
-                this.dIndex = 0;
-            if (this.dIndex == this.eIndex)
-                throw "The queue is empty";
-            return this.container[this.dIndex++];
-        }
+        /**
+         * Returns true if the queue is empty, and false otherwise.
+         *
+         * @returns {boolean}
+         */
+        isEmpty() {
+            // return whether the queue is empty
+            return (this.queue.length == 0);
+        };
+
+        /**
+         * Adds the specified item. The parameter is:
+         *
+         * @param item
+         */
+        enqueue(item) {
+            return this.queue.push(item);
+        };
+
+        /**
+         * Gets an item and returns it. If the queue is empty then undefined is
+         * returned.
+         *
+         * @returns {*}
+         */
+        dequeue() {
+            // if the queue is empty, return undefined
+            if (this.queue.length == 0) return undefined;
+
+            // store the item at the front of the queue
+            var item = this.queue[this.offset];
+
+            // increment the offset and remove the free space if necessary
+            if (++this.offset * 2 >= this.queue.length) {
+                this.queue = this.queue.slice(this.offset);
+                this.offset = 0;
+            }
+
+            return item;
+
+        };
     }
 }
